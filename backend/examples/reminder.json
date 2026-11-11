@@ -1,0 +1,6 @@
+{
+  "taskId": "<actual-task-id>",
+  "userId": "<actual-cognito-sub>",
+  "reminderAt": "<reminderAt-from-dynamodb>",
+  "reminderRevision": 1
+}

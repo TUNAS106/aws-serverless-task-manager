@@ -1,0 +1,19 @@
+{
+  "httpMethod": "GET",
+  "resource": "/tasks",
+  "path": "/tasks",
+  "pathParameters": null,
+  "queryStringParameters": {
+    "limit": "50"
+  },
+  "requestContext": {
+    "requestId": "manual-test-001",
+    "authorizer": {
+      "claims": {
+        "sub": "demo-user-a"
+      }
+    }
+  },
+  "body": null,
+  "isBase64Encoded": false
+}

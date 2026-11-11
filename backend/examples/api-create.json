@@ -1,0 +1,17 @@
+{
+  "httpMethod": "POST",
+  "resource": "/tasks",
+  "path": "/tasks",
+  "pathParameters": null,
+  "queryStringParameters": null,
+  "requestContext": {
+    "requestId": "manual-test-001",
+    "authorizer": {
+      "claims": {
+        "sub": "demo-user-a"
+      }
+    }
+  },
+  "body": "{\"title\": \"Chuẩn bị demo AWS\", \"description\": \"Tạo từ Lambda Console\", \"priority\": \"high\", \"dueAt\": \"2030-01-02T10:00:00Z\", \"reminderOption\": \"none\"}",
+  "isBase64Encoded": false
+}

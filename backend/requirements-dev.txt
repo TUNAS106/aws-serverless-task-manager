@@ -1,0 +1,2 @@
+# Lambda already supplies boto3. This pin is only for reproducible local tests.
+boto3==1.40.0

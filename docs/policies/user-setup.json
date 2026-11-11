@@ -1,0 +1,15 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sns:CreateTopic",
+        "sns:ListSubscriptionsByTopic",
+        "sns:Subscribe",
+        "sns:TagResource"
+      ],
+      "Resource": "arn:aws:sns:<region>:<account-id>:ptdm-user-*"
+    }
+  ]
+}

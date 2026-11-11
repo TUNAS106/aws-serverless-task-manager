@@ -1,0 +1,26 @@
+{
+  "Records": [
+    {
+      "eventID": "operator-reconcile-unique-001",
+      "eventName": "MODIFY",
+      "eventSource": "aws:dynamodb",
+      "dynamodb": {
+        "Keys": {
+          "taskId": {
+            "S": "<actual-task-id>"
+          }
+        },
+        "OldImage": {
+          "status": {
+            "S": "pending"
+          }
+        },
+        "NewImage": {
+          "status": {
+            "S": "pending"
+          }
+        }
+      }
+    }
+  ]
+}

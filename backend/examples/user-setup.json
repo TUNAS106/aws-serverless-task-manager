@@ -1,0 +1,15 @@
+{
+  "version": "1",
+  "triggerSource": "PostConfirmation_ConfirmSignUp",
+  "region": "<region>",
+  "userPoolId": "<pool-id>",
+  "userName": "<actual-username>",
+  "request": {
+    "userAttributes": {
+      "sub": "<actual-cognito-sub>",
+      "email": "<actual-verified-email>",
+      "email_verified": "true"
+    }
+  },
+  "response": {}
+}
