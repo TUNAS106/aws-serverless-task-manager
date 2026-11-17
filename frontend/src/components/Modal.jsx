@@ -30,14 +30,14 @@ export default function Modal({ title, children, onClose, busy = false }) {
     >
       <div className="modal-header">
         <div>
-          <span className="eyebrow">TASK MANAGER · NHẬT KÝ</span>
+          <span className="eyebrow">TASK MANAGER</span>
           <h2 id="modal-title">{title}</h2>
         </div>
         <button
           className="icon-button"
           onClick={onClose}
           disabled={busy}
-          aria-label="Đóng"
+          aria-label="Close dialog"
         >
           <Icon name="close" />
         </button>

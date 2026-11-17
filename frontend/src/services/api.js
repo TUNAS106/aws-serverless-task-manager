@@ -5,8 +5,21 @@ export const isDemo = import.meta.env.VITE_USE_MOCK !== 'false'
 const baseUrl = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
 const storageKey = 'task-manager-demo-v1'
 
+// Keep API feedback in English, including responses from the existing backend.
+const errorMessages = {
+  VALIDATION_ERROR: 'Check the task details and try again.',
+  INVALID_DEADLINE: 'The new deadline must be in the future.',
+  REMINDER_TIME_PASSED: 'The reminder time must be in the future.',
+  TASK_NOT_FOUND: 'Task not found. Refresh the list.',
+  VERSION_CONFLICT:
+    'This task was updated elsewhere. Refresh the list before editing.',
+  UNAUTHORIZED: 'Your session has expired. Please sign in again.',
+  NOT_FOUND: 'The requested resource was not found.',
+  INTERNAL_ERROR: 'Something went wrong. Please try again later.',
+}
+
 export async function apiRequest(path, { token, method = 'GET', body } = {}) {
-  if (!baseUrl) throw new Error('Chưa cấu hình VITE_API_BASE_URL.')
+  if (!baseUrl) throw new Error('Unable to connect. The API URL is not configured.')
   const response = await fetch(`${baseUrl}${path}`, {
     method,
     headers: {
@@ -24,9 +37,10 @@ export async function apiRequest(path, { token, method = 'GET', body } = {}) {
   }
   if (!response.ok) {
     const error = new Error(
-      data?.error?.message ||
-        data?.message ||
-        `Yêu cầu thất bại (HTTP ${response.status}).`,
+      errorMessages[data?.error?.code] ||
+        (response.status === 429
+          ? 'Too many requests. Please wait a moment and try again.'
+          : `Request failed (HTTP ${response.status}). Please try again.`),
     )
     error.status = response.status
     error.code = data?.error?.code
@@ -34,7 +48,7 @@ export async function apiRequest(path, { token, method = 'GET', body } = {}) {
   }
   if (response.status !== 204 && data === null) {
     throw new Error(
-      'API trả về dữ liệu không hợp lệ. Hãy tải lại danh sách để kiểm tra kết quả.',
+      'The server returned an invalid response. Refresh the task list to check the result.',
     )
   }
   return data
@@ -63,11 +77,11 @@ export async function listTasks(token) {
       { token },
     )
     if (!Array.isArray(page?.items))
-      throw new Error('API trả về danh sách không hợp lệ.')
+      throw new Error('The server returned an invalid task list.')
     items.push(...page.items)
     cursor = page.nextCursor
     if (cursor && visited.has(cursor))
-      throw new Error('API trả về cursor lặp. Vui lòng thử lại.')
+      throw new Error('The server returned a repeated page. Please try again.')
     visited.add(cursor)
   } while (cursor)
   return items
@@ -78,7 +92,7 @@ export async function getTask(taskId, token) {
     return apiRequest(`/tasks/${encodeURIComponent(taskId)}`, { token })
   const task = readDemo().find((item) => item.taskId === taskId)
   if (!task) {
-    const error = new Error('Công việc đã bị xóa. Hãy tải lại danh sách.')
+    const error = new Error('This task has been deleted. Refresh the list.')
     error.status = 404
     throw error
   }
@@ -98,7 +112,7 @@ export async function saveTask(values, original, token) {
     } catch (error) {
       if (!original && (!error.status || error.status >= 500)) {
         error.message =
-          'Chưa xác định được công việc đã tạo thành công hay chưa. Đóng form và tải lại danh sách trước khi tạo lại để tránh trùng.'
+          'The task may have been created. Close this form and refresh the list before trying again to avoid duplicates.'
       }
       throw error
     }
@@ -108,7 +122,7 @@ export async function saveTask(values, original, token) {
     original && tasks.find((task) => task.taskId === original.taskId)
   if (original && (!current || current.version !== original.version)) {
     const error = new Error(
-      'Công việc đã thay đổi ở tab khác. Hãy tải lại trước khi sửa.',
+      'This task was updated in another tab. Refresh the list before editing.',
     )
     error.status = current ? 409 : 404
     throw error

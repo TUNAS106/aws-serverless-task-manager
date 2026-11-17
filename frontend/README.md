@@ -1,6 +1,6 @@
 # Task Manager — Frontend
 
-React + Vite, JavaScript và CSS thuần. Giao diện tiếng Việt lấy cảm hứng QuestUI: nền giấy kem sáng, chữ nâu đậm, vàng cổ, font Cinzel/Spectral, huy hiệu và đường viền. Cỡ chữ được tăng để dễ đọc trên desktop và điện thoại. Không thêm thư viện UI, router hay state management.
+React + Vite, JavaScript và CSS thuần. Giao diện tiếng Anh lấy cảm hứng QuestUI: nền giấy kem sáng, chữ nâu đậm, vàng cổ, font Cinzel/Spectral, huy hiệu và đường viền. Nội dung ngắn gọn theo chức năng, đã bỏ các khẩu hiệu và câu trích dẫn động viên. Cỡ chữ được tăng để dễ đọc trên desktop và điện thoại. Không thêm thư viện UI, router hay state management.
 
 ## Chạy trên máy
 
@@ -13,7 +13,7 @@ npm run dev
 
 Mở địa chỉ Vite in ra, thường là `http://localhost:5173/`. Nếu terminal chưa nhận npm sau khi cài NVM, mở terminal mới hoặc chạy `source ~/.bashrc`.
 
-Mặc định dùng **demo local**, không cần AWS hoặc `.env`. Có bảy task mẫu với deadline tương đối so với lần mở đầu tiên. Thêm/sửa/xóa được lưu trong localStorage, tải lại trang không mất dữ liệu. Demo không phát email hoặc tạo lịch AWS.
+Mặc định dùng **demo local**, không cần AWS hoặc `.env`. Có bảy task mẫu tiếng Anh với deadline tương đối so với lần mở đầu tiên. Thêm/sửa/xóa được lưu trong localStorage, tải lại trang không mất dữ liệu. Demo không phát email hoặc tạo lịch AWS. Dữ liệu đã lưu trước khi đổi ngôn ngữ không bị dịch hoặc ghi đè.
 
 VS Code cũng chạy được bằng bảng **NPM Scripts**: bấm nút chạy cạnh `dev` hoặc `build`.
 
@@ -22,7 +22,7 @@ VS Code cũng chạy được bằng bảng **NPM Scripts**: bấm nút chạy c
 - Tạo, xem, sửa, xóa có xác nhận; hoàn thành và mở lại.
 - Tìm tên/mô tả; kết hợp trạng thái, ưu tiên, deadline; sắp xếp mới nhất, deadline hoặc ưu tiên.
 - Tổng task, chưa hoàn thành, quá hạn, hoàn thành; tiến độ và ba deadline gần nhất.
-- “Sắp đến hạn” tính trong 24 giờ tới, chỉ với task chưa hoàn thành. “Quá hạn” là giá trị tính từ deadline, không phải status trong DB.
+- “Due soon” tính trong 24 giờ tới, chỉ với task chưa hoàn thành. “Overdue” là giá trị tính từ deadline, không phải status trong DB.
 - Form kiểm tra độ dài, deadline và reminder; thông báo lỗi, trạng thái đang gửi, chống bấm gửi liên tiếp.
 - Giờ theo timezone trình duyệt, gửi ISO UTC. Giữ nguyên giây deadline cũ nếu người dùng không sửa giờ.
 - Modal dùng `dialog` để giữ focus, Escape để đóng; hỗ trợ bàn phím và màn hình nhỏ.

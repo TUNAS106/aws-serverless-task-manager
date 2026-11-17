@@ -1,5 +1,13 @@
 # Kết quả kiểm tra frontend
 
+## Rà soát trước khi push — 17/11/2026
+
+- Node.js 24.22.2, npm 11.19.1: `npm run lint`, `npm test`, `npm run build` đều pass.
+- `node --test --test-isolation=none`: 10/10 pass; chế độ mặc định báo 2 file test pass. Không nhầm số file với số test case.
+- Source giao diện tiếng Anh đã được rà soát cùng service API, validation và Cognito PKCE. Không thêm framework hoặc thay đổi contract backend.
+- `npm audit --audit-level=high`: chưa thực hiện thành công do DNS `EAI_AGAIN` tới `registry.npmjs.org`. Chưa có kết luận dependency không chứa lỗ hổng.
+- Chưa chạy lại browser/responsive hoặc kiểm thử AWS trực tiếp trong lần rà soát này. Theo thông tin chủ project cung cấp, ứng dụng đã chạy trên AWS; các bảng lịch sử bên dưới chỉ phản ánh phạm vi từng lần kiểm tra.
+
 ## Rà soát trước khi push — 11/11/2026
 
 - `npm run lint` và `npm run build`: pass trên Node.js 24.22.2.

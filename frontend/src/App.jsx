@@ -18,10 +18,10 @@ import { isOverdue, isUpcoming, editableFields } from './taskUtils'
 import './App.css'
 
 const navigation = [
-  { id: 'all', label: 'Tất cả công việc', icon: 'book' },
-  { id: 'active', label: 'Đang thực hiện', icon: 'flag' },
-  { id: 'upcoming', label: 'Sắp đến hạn', icon: 'clock' },
-  { id: 'completed', label: 'Đã hoàn thành', icon: 'check' },
+  { id: 'all', label: 'All tasks', icon: 'book' },
+  { id: 'active', label: 'In progress', icon: 'flag' },
+  { id: 'upcoming', label: 'Due soon', icon: 'clock' },
+  { id: 'completed', label: 'Completed', icon: 'check' },
 ]
 const emptyFilters = { search: '', status: '', priority: '', due: '' }
 
@@ -65,7 +65,7 @@ function App() {
             setFeedback({
               type: 'success',
               message:
-                'Đã đăng nhập. Nếu vừa đăng ký, hãy mở email từ AWS Notifications và bấm Confirm subscription để nhận thông báo công việc.',
+                'Signed in. If you just registered, open the AWS Notifications email and select Confirm subscription to enable task notifications.',
             })
         }
       })
@@ -90,7 +90,7 @@ function App() {
         setModal(null)
         setFeedback({
           type: 'error',
-          message: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.',
+          message: 'Your session has expired. Please sign in again.',
         })
       },
       Math.max(0, remaining),
@@ -105,7 +105,7 @@ function App() {
       setModal(null)
       setFeedback({
         type: 'error',
-        message: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.',
+        message: 'Your session has expired. Please sign in again.',
       })
     } else {
       if (error.status === 409) setModal(null)
@@ -113,7 +113,7 @@ function App() {
         type: 'error',
         message:
           error.status === 409
-            ? 'Công việc đã thay đổi ở nơi khác. Bấm Tải lại, rồi mở lại công việc để sửa.'
+            ? 'This task was updated elsewhere. Refresh the list, then reopen the task to edit it.'
             : error.message,
       })
     }
@@ -173,8 +173,8 @@ function App() {
       setFeedback({
         type: 'success',
         message: original
-          ? 'Đã lưu thay đổi công việc.'
-          : 'Đã thêm công việc vào nhật ký.',
+          ? 'Task updated.'
+          : 'Task created.',
       })
     } catch (error) {
       reportError(error)
@@ -222,7 +222,7 @@ function App() {
         current.filter((task) => task.taskId !== modal.task.taskId),
       )
       setModal(null)
-      setFeedback({ type: 'success', message: 'Đã xóa công việc.' })
+      setFeedback({ type: 'success', message: 'Task deleted.' })
     } catch (error) {
       reportError(error)
     } finally {
@@ -269,8 +269,8 @@ function App() {
       if (filters.due === 'overdue' && !isOverdue(task, now)) return false
       if (filters.due === 'upcoming' && !isUpcoming(task, now)) return false
       return `${task.title} ${task.description}`
-        .toLocaleLowerCase('vi')
-        .includes(filters.search.trim().toLocaleLowerCase('vi'))
+        .toLocaleLowerCase('en')
+        .includes(filters.search.trim().toLocaleLowerCase('en'))
     })
     .sort((a, b) =>
       sort === 'due'
@@ -289,11 +289,11 @@ function App() {
     .slice(0, 3)
   const hasFilters = Object.values(filters).some(Boolean) || view !== 'all'
   const displayName = isDemo
-    ? 'Nhà thám hiểm'
+    ? 'Demo user'
     : session?.profile?.name ||
       session?.profile?.email?.split('@')[0] ||
-      'Nhà thám hiểm'
-  const dateLabel = new Intl.DateTimeFormat('vi-VN', {
+      'Guest'
+  const dateLabel = new Intl.DateTimeFormat('en-GB', {
     weekday: 'long',
     day: '2-digit',
     month: 'long',
@@ -303,14 +303,14 @@ function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <a className="brand" href="./" aria-label="Task Manager — trang chủ">
+        <a className="brand" href="./" aria-label="Task Manager home">
           <Crest />
           <span>
             TASK<span className="brand-second">MANAGER</span>
           </span>
         </a>
-        <div className="sidebar-section-label">NHẬT KÝ CỦA BẠN</div>
-        <nav aria-label="Danh mục công việc">
+        <div className="sidebar-section-label">WORKSPACE</div>
+        <nav aria-label="Task navigation">
           {navigation.map((item) => (
             <button
               key={item.id}
@@ -325,22 +325,13 @@ function App() {
             </button>
           ))}
         </nav>
-        <div className="sidebar-quote">
-          <span className="small-star">✧</span>
-          <p>
-            Hành trình vạn dặm
-            <br />
-            bắt đầu từ một bước chân.
-          </p>
-          <span className="quote-line" />
-        </div>
         <div className="sidebar-bottom">
           <button
             className="nav-item"
             onClick={() => setModal({ type: 'help' })}
           >
             <Icon name="help" size={19} />
-            Hướng dẫn sử dụng
+            Help
           </button>
           <div className="profile">
             <div className="avatar">
@@ -350,14 +341,14 @@ function App() {
               <strong>{displayName}</strong>
               <span>
                 {isDemo
-                  ? 'Chế độ trải nghiệm'
-                  : session?.profile?.email || 'Chưa đăng nhập'}
+                  ? 'Demo mode'
+                  : session?.profile?.email || 'Not signed in'}
               </span>
             </div>
             {session && (
               <button
                 className="icon-button"
-                aria-label="Đăng xuất"
+                aria-label="Sign out"
                 onClick={() => authenticate(logout)}
               >
                 <Icon name="logout" size={18} />
@@ -371,14 +362,14 @@ function App() {
         <header className="topbar">
           <div className="breadcrumb">
             <Icon name="grid" size={16} />
-            <span>Không gian cá nhân</span>
+            <span>Personal workspace</span>
             <span className="slash">/</span>
-            <strong>Nhật ký công việc</strong>
+            <strong>Tasks</strong>
           </div>
           <div className="topbar-right">
             <button
               className="icon-button"
-              aria-label="Hướng dẫn sử dụng"
+              aria-label="Help"
               onClick={() => setModal({ type: 'help' })}
             >
               <Icon name="help" size={18} />
@@ -386,7 +377,7 @@ function App() {
             {session && (
               <button
                 className="icon-button"
-                aria-label="Đăng xuất tài khoản"
+                aria-label="Sign out"
                 onClick={() => authenticate(logout)}
               >
                 <Icon name="logout" size={18} />
@@ -394,14 +385,14 @@ function App() {
             )}
             <span className={`mode-badge ${isDemo ? '' : 'live'}`}>
               <i />
-              {isDemo ? 'BẢN DEMO' : 'CLOUD'}
+              {isDemo ? 'DEMO' : 'CLOUD'}
             </span>
             {!isDemo && !session && (
               <button
                 className="button secondary compact"
                 onClick={() => authenticate(login)}
               >
-                Đăng nhập
+                Sign in
               </button>
             )}
           </div>
@@ -409,12 +400,9 @@ function App() {
         <main id="main-content">
           <div className="page-heading">
             <div>
-              <p className="eyebrow">MỖI NGÀY, MỘT BƯỚC TIẾN</p>
-              <h1>
-                Nhật ký công việc<span className="heading-star">✧</span>
-              </h1>
+              <h1>Task overview</h1>
               <p className="page-subtitle">
-                Sắp xếp những điều cần làm. Dành tâm trí cho điều quan trọng.
+                Manage tasks, deadlines, and email reminders.
               </p>
             </div>
             <div className="today">
@@ -432,12 +420,12 @@ function App() {
               <div>
                 {feedback.type === 'error' && canUseApp && (
                   <button onClick={reload} disabled={loading || busy}>
-                    Tải lại
+                    Refresh
                   </button>
                 )}
                 <button
                   className="icon-button"
-                  aria-label="Đóng thông báo"
+                  aria-label="Dismiss notification"
                   onClick={() => setFeedback(null)}
                 >
                   <Icon name="close" size={16} />
@@ -449,11 +437,11 @@ function App() {
           {!canUseApp ? (
             <section className="welcome panel">
               <Crest large />
-              <p className="eyebrow">HÀNH TRÌNH CỦA RIÊNG BẠN</p>
-              <h2>Một nơi cho mọi công việc.</h2>
+              <p className="eyebrow">PERSONAL WORKSPACE</p>
+              <h2>Manage your tasks</h2>
               <p>
-                Đăng nhập để quản lý công việc, theo dõi deadline và nhận nhắc
-                nhở qua email.
+                Sign in to manage tasks, track deadlines, and receive email
+                reminders.
               </p>
               <button
                 className="button primary"
@@ -461,33 +449,29 @@ function App() {
                 onClick={() => authenticate(login)}
               >
                 <Icon name="shield" />
-                {authLoading ? 'Đang kiểm tra phiên…' : 'Đăng nhập / Đăng ký'}
+                {authLoading ? 'Checking session…' : 'Sign in / Sign up'}
               </button>
               <p className="muted">
-                Tài khoản được quản lý qua Amazon Cognito.
+                Secure sign-in with Amazon Cognito.
               </p>
             </section>
           ) : (
             <>
               <section className="hero-panel">
                 <div className="hero-copy">
-                  <span className="eyebrow">CHƯƠNG MỚI ĐANG CHỜ BẠN</span>
-                  <h2>
-                    Từng việc nhỏ.
-                    <br />
-                    <em>Thành tựu lớn.</em>
-                  </h2>
+                  <span className="eyebrow">WORKSPACE OVERVIEW</span>
+                  <h2>Tasks and deadlines</h2>
                   <p>
                     {overdue
-                      ? `Có ${overdue} công việc cần bạn quay lại. Chọn một việc và tiếp tục hành trình.`
-                      : 'Một mục tiêu rõ ràng là khởi đầu của một ngày ý nghĩa.'}
+                      ? `${overdue} overdue ${overdue === 1 ? 'task' : 'tasks'}. Review deadlines and update task status.`
+                      : 'Create a task, set a deadline, and track its status.'}
                   </p>
                   <button
                     className="button primary"
                     onClick={() => setModal({ type: 'form' })}
                   >
                     <Icon name="plus" size={18} />
-                    Thêm công việc
+                    New task
                     <Icon name="arrow" size={17} />
                   </button>
                 </div>
@@ -499,7 +483,7 @@ function App() {
                   <span className="emblem-star star-three">✧</span>
                   <Crest large />
                   <span className="emblem-caption">
-                    FOCUS · PURPOSE · PROGRESS
+                    TASKS · DEADLINES · REMINDERS
                   </span>
                 </div>
                 <div className="hero-corner">I</div>
@@ -517,7 +501,7 @@ function App() {
                 <section className="task-panel panel" aria-busy={loading}>
                   <div className="section-heading">
                     <div>
-                      <span className="eyebrow">CUỐN SỔ HÀNH TRÌNH</span>
+                      <span className="eyebrow">TASK LIST</span>
                       <h2>
                         {navigation.find((item) => item.id === view)?.label}
                         <span className="count-badge">{visible.length}</span>
@@ -525,8 +509,8 @@ function App() {
                     </div>
                     <button
                       className="icon-button"
-                      title="Tải lại danh sách"
-                      aria-label="Tải lại danh sách"
+                      title="Refresh tasks"
+                      aria-label="Refresh tasks"
                       onClick={reload}
                       disabled={loading || busy}
                     >
@@ -537,34 +521,34 @@ function App() {
                   <div className="list-toolbar">
                     <span>
                       {loading
-                        ? 'Đang tải nhật ký…'
-                        : `${visible.length} công việc`}
+                        ? 'Loading tasks…'
+                        : `${visible.length} ${visible.length === 1 ? 'task' : 'tasks'}`}
                       {hasFilters && (
                         <button
                           className="text-button"
                           onClick={() => navigate('all')}
                         >
-                          Xóa bộ lọc
+                          Clear filters
                         </button>
                       )}
                     </span>
                     <label>
-                      Sắp xếp:
+                      Sort by:
                       <select
-                        aria-label="Sắp xếp công việc"
+                        aria-label="Sort tasks"
                         value={sort}
                         onChange={(e) => setSort(e.target.value)}
                       >
-                        <option value="created">Mới nhất</option>
-                        <option value="due">Deadline gần nhất</option>
-                        <option value="priority">Ưu tiên cao</option>
+                        <option value="created">Newest first</option>
+                        <option value="due">Earliest deadline</option>
+                        <option value="priority">Highest priority</option>
                       </select>
                     </label>
                   </div>
                   {loading ? (
                     <div className="loading-state" role="status">
                       <span className="loader" />
-                      Đang mở cuốn sổ của bạn…
+                      Loading tasks…
                     </div>
                   ) : visible.length ? (
                     <div className="task-list">
@@ -587,13 +571,13 @@ function App() {
                       <Icon name="book" size={36} />
                       <h3>
                         {hasFilters
-                          ? 'Chưa tìm thấy công việc'
-                          : 'Một trang mới đang chờ'}
+                          ? 'No matching tasks'
+                          : 'No tasks yet'}
                       </h3>
                       <p>
                         {hasFilters
-                          ? 'Thử đổi từ khóa hoặc bỏ bớt bộ lọc.'
-                          : 'Thêm công việc đầu tiên để bắt đầu hành trình.'}
+                          ? 'Try a different search or clear the filters.'
+                          : 'Create your first task to get started.'}
                       </p>
                       <button
                         className="button secondary"
@@ -603,15 +587,10 @@ function App() {
                             : setModal({ type: 'form' })
                         }
                       >
-                        {hasFilters ? 'Xóa bộ lọc' : 'Thêm công việc'}
+                        {hasFilters ? 'Clear filters' : 'New task'}
                       </button>
                     </div>
                   )}
-                  <div className="list-footer">
-                    <span className="small-star">✧</span>
-                    <span>Mỗi dấu tích là một bước tiến.</span>
-                    <span className="small-star">✧</span>
-                  </div>
                 </section>
 
                 <JourneyPanels
@@ -631,8 +610,6 @@ function App() {
           )}
           <footer className="page-footer">
             <span>TASK MANAGER</span>
-            <span>Một chút ngăn nắp. Nhiều khoảng thảnh thơi.</span>
-            <span>✧</span>
           </footer>
         </main>
       </div>
@@ -641,11 +618,11 @@ function App() {
           title={
             modal.type === 'form'
               ? modal.task
-                ? 'Chi tiết công việc'
-                : 'Thêm công việc mới'
+                ? 'Task details'
+                : 'New task'
               : modal.type === 'delete'
-                ? 'Xóa công việc?'
-                : 'Hướng dẫn sử dụng'
+                ? 'Delete task?'
+                : 'Help'
           }
           onClose={() => setModal(null)}
           busy={busy}
@@ -662,9 +639,9 @@ function App() {
           {modal.type === 'delete' && (
             <>
               <p className="delete-message">
-                Bạn sắp xóa <strong>“{modal.task.title}”</strong>. Thao tác này
-                không thể hoàn tác.
-                {!isDemo && ' Hệ thống sẽ xử lý hủy lịch nhắc liên quan.'}
+                Delete <strong>“{modal.task.title}”</strong>? This action cannot
+                be undone.
+                {!isDemo && ' Any associated reminder will be cancelled.'}
               </p>
               <div className="modal-actions">
                 <button
@@ -672,7 +649,7 @@ function App() {
                   disabled={busy}
                   onClick={() => setModal(null)}
                 >
-                  Giữ lại
+                  Cancel
                 </button>
                 <button
                   className="button destructive"
@@ -680,7 +657,7 @@ function App() {
                   onClick={confirmDelete}
                 >
                   <Icon name="trash" size={17} />
-                  {busy ? 'Đang xóa…' : 'Xóa công việc'}
+                  {busy ? 'Deleting…' : 'Delete task'}
                 </button>
               </div>
             </>
@@ -688,34 +665,35 @@ function App() {
           {modal.type === 'help' && (
             <div className="help-content">
               <p>
-                Ghi lại công việc cùng deadline, độ ưu tiên và lựa chọn nhắc qua
-                email.
+                Create tasks with a deadline, priority, and optional email
+                reminder.
               </p>
               <ol>
                 <li>
-                  Bấm <strong>Thêm công việc</strong> để tạo một mục mới.
+                  Select <strong>New task</strong> to create a task.
                 </li>
                 <li>
-                  Bấm tên công việc hoặc biểu tượng bút để xem và chỉnh sửa.
+                  Select a task title or the edit icon to view and edit it.
                 </li>
-                <li>Đánh dấu ô vuông để hoàn thành; bấm lại để mở lại.</li>
                 <li>
-                  Kết hợp tìm kiếm, trạng thái, độ ưu tiên và deadline để lọc
-                  danh sách.
+                  Select the checkbox to complete a task; select it again to reopen.
+                </li>
+                <li>
+                  Filter tasks by search, status, priority, and deadline.
                 </li>
               </ol>
               <p>
-                “Sắp đến hạn” là các công việc chưa hoàn thành trong{' '}
-                <strong>24 giờ tới</strong>. Giờ hiển thị theo múi giờ trình
-                duyệt.
+                “Due soon” shows incomplete tasks due within the next{' '}
+                <strong>24 hours</strong>. Dates and times use your browser’s
+                time zone.
               </p>
               <p>
                 {isDemo
-                  ? 'Dữ liệu demo được lưu riêng trong trình duyệt này. Email và lịch nhắc AWS chưa được kích hoạt ở chế độ demo.'
-                  : 'Thông báo email cần xác nhận đăng ký SNS. Email là thông báo bất đồng bộ và có thể đến chậm.'}
+                  ? 'Demo data is stored in this browser. Email notifications and scheduled reminders are unavailable in demo mode.'
+                  : 'Confirm your email subscription to receive notifications. Email delivery is asynchronous and may be delayed.'}
               </p>
               <button className="button primary" onClick={() => setModal(null)}>
-                Đã hiểu
+                Got it
                 <Icon name="check" size={17} />
               </button>
             </div>

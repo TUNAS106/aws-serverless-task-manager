@@ -1,13 +1,13 @@
 export const STATUS = {
-  pending: 'Chưa bắt đầu',
-  in_progress: 'Đang thực hiện',
-  completed: 'Hoàn thành',
+  pending: 'Not started',
+  in_progress: 'In progress',
+  completed: 'Completed',
 }
-export const PRIORITY = { high: 'Cao', medium: 'Trung bình', low: 'Thấp' }
+export const PRIORITY = { high: 'High', medium: 'Medium', low: 'Low' }
 export const REMINDER = {
-  none: 'Không nhắc',
-  '1h': 'Trước 1 giờ',
-  '24h': 'Trước 24 giờ',
+  none: 'No reminder',
+  '1h': '1 hour before',
+  '24h': '24 hours before',
 }
 
 export function isOverdue(task, now = Date.now()) {
@@ -20,9 +20,9 @@ export function isUpcoming(task, now = Date.now()) {
 }
 
 export function formatDate(value) {
-  return new Intl.DateTimeFormat('vi-VN', {
+  return new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
-    month: '2-digit',
+    month: 'short',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
@@ -44,24 +44,24 @@ export function resolveDueAt(localValue, original) {
 // Keep time validation in one place for the form and the local demo service.
 export function validateTask(values, original, now = Date.now()) {
   if (!values.title.trim() || values.title.trim().length > 120)
-    return 'Tên công việc cần có từ 1 đến 120 ký tự.'
+    return 'Task title must be between 1 and 120 characters.'
   if (values.description.length > 1000)
-    return 'Mô tả không được vượt quá 1.000 ký tự.'
+    return 'Description must not exceed 1,000 characters.'
   if (
     !PRIORITY[values.priority] ||
     !STATUS[values.status] ||
     !REMINDER[values.reminderOption]
   )
-    return 'Lựa chọn không hợp lệ.'
+    return 'Select a valid status, priority, and reminder option.'
   const due = new Date(values.dueAt).getTime()
-  if (!Number.isFinite(due)) return 'Vui lòng nhập ngày và giờ hợp lệ.'
+  if (!Number.isFinite(due)) return 'Enter a valid date and time.'
   const dueChanged = !original || due !== new Date(original.dueAt).getTime()
-  if (dueChanged && due <= now) return 'Deadline mới phải nằm trong tương lai.'
+  if (dueChanged && due <= now) return 'The new deadline must be in the future.'
   const reminderChanged =
     !original || dueChanged || values.reminderOption !== original.reminderOption
   const offset = { '1h': 3600000, '24h': 86400000 }[values.reminderOption]
   if (reminderChanged && offset && due - offset <= now)
-    return 'Giờ nhắc đã qua. Hãy chọn deadline xa hơn hoặc thay lựa chọn nhắc.'
+    return 'The reminder time has passed. Choose a later deadline or a different reminder.'
   return ''
 }
 

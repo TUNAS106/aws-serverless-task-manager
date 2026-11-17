@@ -97,33 +97,6 @@
   border-radius: 2px;
 }
 
-.sidebar-quote {
-  margin: auto 0;
-  text-align: center;
-  padding: 38px 0;
-  color: #78664d;
-}
-
-.small-star {
-  color: var(--gold);
-  font-size: 26px;
-}
-
-.sidebar-quote p {
-  font-size: 18px;
-  line-height: 1.8;
-  font-style: italic;
-  margin: 12px 0 18px;
-}
-
-.quote-line {
-  display: block;
-  width: 40px;
-  height: 1px;
-  background: #ca8a0440;
-  margin: auto;
-}
-
 .sidebar-bottom {
   margin-top: auto;
 }
@@ -260,13 +233,6 @@ main {
   line-height: 1.5;
   margin-top: 7px;
   letter-spacing: -0.7px;
-}
-
-.heading-star {
-  color: var(--gold);
-  font-size: 30px;
-  vertical-align: middle;
-  margin-left: 16px;
 }
 
 .page-subtitle {
@@ -892,21 +858,6 @@ main {
   padding: 6px;
 }
 
-.list-footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  padding: 13px;
-  color: #786044;
-  font-size: 15px;
-  font-style: italic;
-}
-
-.list-footer .small-star {
-  font-size: 19px;
-}
-
 .right-column {
   display: flex;
   flex-direction: column;
@@ -1109,10 +1060,6 @@ main {
   font-family: var(--heading);
   font-size: 12px;
   letter-spacing: 2px;
-}
-
-.page-footer > span:last-child {
-  color: var(--gold);
 }
 
 .feedback {
@@ -1561,7 +1508,6 @@ main {
     width: 22px;
   }
   .sidebar-section-label,
-  .sidebar-quote,
   .sidebar-bottom {
     display: none;
   }
@@ -1614,10 +1560,6 @@ main {
   }
   .page-heading h1 {
     font-size: 30px;
-  }
-  .heading-star {
-    font-size: 26px;
-    margin-left: 12px;
   }
   .page-subtitle {
     font-size: 16px;
@@ -1765,13 +1707,6 @@ main {
     font-size: 13px;
     padding-top: 28px;
     gap: 10px;
-  }
-  .page-footer > span:nth-child(2) {
-    max-width: 170px;
-    text-align: right;
-  }
-  .page-footer > span:last-child {
-    display: none;
   }
   .modal {
     padding: 24px 20px;

@@ -62,6 +62,8 @@ Trong `../docs/policies/` đã có JSON hoàn chỉnh. Mở bằng VS Code, thay
 4. Role `PtdmSchedulerInvokeRole` dùng **`scheduler-trust.json`** và **`scheduler-invoke.json`**, không dùng trust của Lambda.
 5. Gắn hai tag `Project=task-manager`, `Environment=demo` riêng cho từng role và function. Log groups và Scheduler group cũng cần gắn riêng theo hướng dẫn.
 
+`dynamodb-endpoint.json` là resource policy của DynamoDB Gateway Endpoint, không phải inline policy để gắn vào role. Thay `<region>`/`<account-id>` và ARN `PtdmTaskApiRole` theo execution role thực tế (kể cả role path nếu có), rồi dán tại VPC → Endpoints → endpoint của project → Policy → Edit. Policy giới hạn principal theo role đó và tài nguyên TasksTable/GSI; IAM role vẫn phải có quyền tương ứng.
+
 Task API dùng **PutItem có điều kiện** cho PUT full replacement, giữ các trường bất biến từ bản đọc mạnh. Vì vậy policy hiện tại không cần UpdateItem cho TasksTable; ledger vẫn cần UpdateItem. DeleteItem kiểm tra ownership ngay trong điều kiện ghi.
 
 ## Đóng gói và upload bằng GUI

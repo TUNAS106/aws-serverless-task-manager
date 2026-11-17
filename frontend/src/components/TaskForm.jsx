@@ -57,34 +57,34 @@ export default function TaskForm({ task, now, onSave, onClose, busy }) {
     <form onSubmit={submit} className="task-form">
       <fieldset disabled={busy}>
         <label>
-          Tên công việc <span className="required">*</span>
+          Task title <span className="required">*</span>
           <input
             name="title"
             value={values.title}
             onChange={change}
             maxLength={120}
             required
-            placeholder="Hành trình tiếp theo của bạn là gì?"
+            placeholder="Enter a task title"
             autoFocus
           />
         </label>
         <label>
-          Mô tả
+          Description
           <textarea
             name="description"
             value={values.description}
             onChange={change}
             maxLength={1000}
             rows={3}
-            placeholder="Ghi chú những điều cần thực hiện…"
+            placeholder="Add details or notes…"
           />
           <span className="field-help">
-            {values.description.length}/1.000 ký tự
+            {values.description.length}/1,000 characters
           </span>
         </label>
         <div className="form-grid">
           <label>
-            Độ ưu tiên
+            Priority
             <select name="priority" value={values.priority} onChange={change}>
               {Object.entries(PRIORITY).map(([key, label]) => (
                 <option key={key} value={key}>
@@ -95,7 +95,7 @@ export default function TaskForm({ task, now, onSave, onClose, busy }) {
           </label>
           {task && (
             <label>
-              Trạng thái
+              Status
               <select name="status" value={values.status} onChange={change}>
                 {Object.entries(STATUS).map(([key, label]) => (
                   <option key={key} value={key}>
@@ -116,12 +116,11 @@ export default function TaskForm({ task, now, onSave, onClose, busy }) {
             required
           />
           <span className="field-help">
-            Giờ địa phương: {Intl.DateTimeFormat().resolvedOptions().timeZone}.
-            Tự chuyển sang UTC khi lưu.
+            Time zone: {Intl.DateTimeFormat().resolvedOptions().timeZone}.
           </span>
         </label>
         <label>
-          Nhắc qua email
+          Email reminder
           <select
             name="reminderOption"
             value={values.reminderOption}
@@ -136,13 +135,13 @@ export default function TaskForm({ task, now, onSave, onClose, busy }) {
         </label>
         {oldReminderPassed && (
           <p className="notice">
-            Giờ nhắc đã qua; đổi deadline hoặc lựa chọn nhắc để đặt lịch mới.
-            Bạn vẫn có thể sửa nội dung và trạng thái.
+            The reminder time has passed. Change the deadline or reminder to
+            schedule a new one. You can still edit task details and status.
           </p>
         )}
         {task && (
           <p className="field-help">
-            Cập nhật lần cuối: {formatDate(task.updatedAt)} · Phiên bản{' '}
+            Last updated: {formatDate(task.updatedAt)} · Version{' '}
             {task.version}
           </p>
         )}
@@ -159,11 +158,11 @@ export default function TaskForm({ task, now, onSave, onClose, busy }) {
           onClick={onClose}
           disabled={busy}
         >
-          Hủy
+          Cancel
         </button>
         <button className="button primary" disabled={busy}>
           <Icon name="check" size={17} />
-          {busy ? 'Đang lưu…' : task ? 'Lưu thay đổi' : 'Tạo công việc'}
+          {busy ? 'Saving…' : task ? 'Save changes' : 'Create task'}
         </button>
       </div>
     </form>

@@ -18,7 +18,7 @@ export default function TaskRow({
         className={`task-check ${task.status === 'completed' ? 'checked' : ''}`}
         onClick={() => onToggle(task)}
         disabled={busy}
-        aria-label={`${task.status === 'completed' ? 'Mở lại' : 'Hoàn thành'}: ${task.title}`}
+        aria-label={`${task.status === 'completed' ? 'Reopen' : 'Complete'}: ${task.title}`}
       >
         {task.status === 'completed' && <Icon name="check" size={15} />}
       </button>
@@ -30,12 +30,12 @@ export default function TaskRow({
         >
           {task.title}
         </button>
-        <p>{task.description || 'Chưa có mô tả.'}</p>
+        <p>{task.description || 'No description.'}</p>
         <div className="task-meta">
           <span className={overdue ? 'overdue-text' : ''}>
             <Icon name="clock" size={14} />
             {formatDate(task.dueAt)}
-            {overdue && ' · Quá hạn'}
+            {overdue && ' · Overdue'}
           </span>
           {task.reminderOption !== 'none' && (
             <span>
@@ -57,7 +57,7 @@ export default function TaskRow({
           className="icon-button"
           onClick={() => onEdit(task)}
           disabled={busy}
-          aria-label={`Sửa: ${task.title}`}
+          aria-label={`Edit: ${task.title}`}
         >
           <Icon name="edit" size={17} />
         </button>
@@ -65,7 +65,7 @@ export default function TaskRow({
           className="icon-button danger"
           onClick={() => onDelete(task)}
           disabled={busy}
-          aria-label={`Xóa: ${task.title}`}
+          aria-label={`Delete: ${task.title}`}
         >
           <Icon name="trash" size={17} />
         </button>

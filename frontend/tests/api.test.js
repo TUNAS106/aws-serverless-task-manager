@@ -58,7 +58,7 @@ test('uncertain POST asks user to check the list and does not retry', async () =
   }
   await assert.rejects(
     api.saveTask({ title: 'Test' }, null, 'token'),
-    /tải lại danh sách/,
+    /refresh the list/,
   )
   assert.equal(calls, 1)
 })
@@ -67,7 +67,7 @@ test('successful but malformed response is not treated as a saved task', async (
   globalThis.fetch = async () => new Response('<html>proxy error</html>')
   await assert.rejects(
     api.saveTask({ title: 'Test' }, null, 'token'),
-    /tránh trùng/,
+    /avoid duplicates/,
   )
 })
 

@@ -13,32 +13,32 @@ export default function JourneyPanels({
   return (
     <aside className="right-column">
       <section className="progress-panel panel">
-        <span className="eyebrow">NHÌN LẠI HÀNH TRÌNH</span>
-        <h2>Tiến độ của bạn</h2>
+        <span className="eyebrow">COMPLETION RATE</span>
+        <h2>Task progress</h2>
         <div
           className="progress-ring"
           style={{ '--progress': `${progress * 3.6}deg` }}
           role="img"
-          aria-label={`Hoàn thành ${progress}%`}
+          aria-label={`${progress}% complete`}
         >
           <div>
             <strong>
               {progress}
               <small>%</small>
             </strong>
-            <span>HOÀN THÀNH</span>
+            <span>COMPLETE</span>
           </div>
         </div>
         <p>
-          <strong>{completed}</strong> trên <strong>{total}</strong> công việc
-          đã hoàn thành
+          <strong>{completed}</strong> of <strong>{total}</strong> tasks
+          completed
         </p>
         <div className="progress-note">
           <Icon name="flag" size={16} />
           <span>
             {progress === 100 && total
-              ? 'Một hành trình trọn vẹn. Làm tốt lắm!'
-              : 'Cứ tiến lên, theo nhịp của bạn.'}
+              ? 'All tasks completed.'
+              : `${total - completed} ${total - completed === 1 ? 'task remaining' : 'tasks remaining'}.`}
           </span>
         </div>
       </section>
@@ -46,7 +46,7 @@ export default function JourneyPanels({
         <div className="section-heading">
           <h2>
             <Icon name="clock" size={18} />
-            Deadline gần nhất
+            Upcoming deadlines
           </h2>
         </div>
         {nextTasks.length ? (
@@ -65,13 +65,13 @@ export default function JourneyPanels({
             </button>
           ))
         ) : (
-          <p className="muted">Không có deadline nào phía trước.</p>
+          <p className="muted">No upcoming deadlines.</p>
         )}
         <button
           className="text-button deadline-link"
           onClick={() => onViewDeadlines()}
         >
-          Xem nhật ký công việc
+          View all tasks
           <Icon name="arrow" size={15} />
         </button>
       </section>
@@ -79,8 +79,8 @@ export default function JourneyPanels({
         <Icon name="bell" size={19} />
         <p>
           {isDemo
-            ? 'Bạn đang dùng dữ liệu demo trên trình duyệt. Chế độ này không gửi email.'
-            : 'Đừng quên xác nhận email đăng ký SNS để nhận thông báo và lời nhắc.'}
+            ? 'Demo data is stored in this browser. Email reminders are disabled.'
+            : 'Confirm your email subscription to receive task notifications and reminders.'}
         </p>
       </div>
     </aside>

@@ -8,23 +8,23 @@ export default function Summary({
   onSelect,
 }) {
   return (
-    <section className="stats" aria-label="Tổng quan công việc">
+    <section className="stats" aria-label="Task summary">
       {[
-        ['all', 'Tổng công việc', total, 'book', 'Mọi hành trình của bạn'],
+        ['all', 'Total tasks', total, 'book', 'All tasks in your workspace'],
         [
           'unfinished',
-          'Chưa hoàn thành',
+          'Incomplete',
           total - completed,
           'flag',
-          'Từng bước tiến về phía trước',
+          'Not started or in progress',
         ],
-        ['overdue', 'Đã quá hạn', overdue, 'clock', 'Cần một chút chú ý'],
+        ['overdue', 'Overdue', overdue, 'clock', 'Past the deadline'],
         [
           'completed',
-          'Đã hoàn thành',
+          'Completed',
           completed,
           'check',
-          'Những dấu mốc đã chinh phục',
+          'Tasks marked as complete',
         ],
       ].map(([id, label, count, icon, caption]) => (
         <button

@@ -9,7 +9,7 @@ const flowKey = 'task-manager-login'
 function checkConfig() {
   if (!poolId || !clientId || !domain)
     throw new Error(
-      'Chưa cấu hình Cognito. Xem hướng dẫn trong frontend/README.md.',
+      'Sign-in is not configured. See frontend/README.md for setup instructions.',
     )
 }
 
@@ -49,12 +49,12 @@ async function verifyIdToken(token, nonce) {
     claims.exp * 1000 <= Date.now() ||
     claims.nonce !== nonce
   )
-    throw new Error('ID token không hợp lệ. Vui lòng đăng nhập lại.')
+    throw new Error('Your sign-in token is invalid. Please sign in again.')
   const response = await fetch(`${issuer()}/.well-known/jwks.json`)
-  if (!response.ok) throw new Error('Không tải được khóa xác minh Cognito.')
+  if (!response.ok) throw new Error('Unable to verify your sign-in. Please try again.')
   const { keys } = await response.json()
   const jwk = keys.find((key) => key.kid === header.kid && key.kty === 'RSA')
-  if (!jwk) throw new Error('Không tìm thấy khóa xác minh ID token.')
+  if (!jwk) throw new Error('The sign-in verification key was not found.')
   const key = await crypto.subtle.importKey(
     'jwk',
     jwk,
@@ -68,7 +68,7 @@ async function verifyIdToken(token, nonce) {
     decodeBytes(signaturePart),
     new TextEncoder().encode(`${headerPart}.${payloadPart}`),
   )
-  if (!valid) throw new Error('Chữ ký ID token không hợp lệ.')
+  if (!valid) throw new Error('Your sign-in token signature is invalid.')
   return claims
 }
 
@@ -142,10 +142,10 @@ async function finishLogin(params) {
     Date.now() - flow.createdAt > 600000
   )
     throw new Error(
-      'Phiên xác thực không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại.',
+      'Your sign-in request is invalid or has expired. Please sign in again.',
     )
   if (params.has('error'))
-    throw new Error('Đăng nhập chưa hoàn tất. Vui lòng thử lại.')
+    throw new Error('Sign-in was not completed. Please try again.')
   const response = await fetch(`${domain}/oauth2/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -159,7 +159,7 @@ async function finishLogin(params) {
   })
   if (!response.ok)
     throw new Error(
-      'Không đổi được mã đăng nhập. Kiểm tra cấu hình Cognito và callback URL.',
+      'Unable to complete sign-in. Check the Cognito configuration and callback URL.',
     )
   const tokens = await response.json()
   const profile = await verifyIdToken(tokens.id_token, flow.nonce)

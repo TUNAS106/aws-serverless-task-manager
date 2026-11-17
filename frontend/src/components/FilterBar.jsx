@@ -7,20 +7,20 @@ export default function FilterBar({ filters, onChange }) {
       <label className="search-field">
         <Icon name="search" size={17} />
         <input
-          aria-label="Tìm công việc"
-          placeholder="Tìm trong nhật ký…"
+          aria-label="Search tasks"
+          placeholder="Search tasks…"
           value={filters.search}
           onChange={(e) => onChange({ ...filters, search: e.target.value })}
         />
       </label>
       <div className="filter-selects">
         <select
-          aria-label="Lọc trạng thái"
+          aria-label="Filter by status"
           value={filters.status}
           onChange={(e) => onChange({ ...filters, status: e.target.value })}
         >
-          <option value="">Trạng thái</option>
-          <option value="unfinished">Chưa hoàn thành</option>
+          <option value="">All statuses</option>
+          <option value="unfinished">Incomplete</option>
           {Object.entries(STATUS).map(([key, label]) => (
             <option key={key} value={key}>
               {label}
@@ -28,11 +28,11 @@ export default function FilterBar({ filters, onChange }) {
           ))}
         </select>
         <select
-          aria-label="Lọc độ ưu tiên"
+          aria-label="Filter by priority"
           value={filters.priority}
           onChange={(e) => onChange({ ...filters, priority: e.target.value })}
         >
-          <option value="">Độ ưu tiên</option>
+          <option value="">All priorities</option>
           {Object.entries(PRIORITY).map(([key, label]) => (
             <option key={key} value={key}>
               {label}
@@ -40,13 +40,13 @@ export default function FilterBar({ filters, onChange }) {
           ))}
         </select>
         <select
-          aria-label="Lọc deadline"
+          aria-label="Filter by deadline"
           value={filters.due}
           onChange={(e) => onChange({ ...filters, due: e.target.value })}
         >
-          <option value="">Deadline</option>
-          <option value="overdue">Quá hạn</option>
-          <option value="upcoming">Trong 24 giờ</option>
+          <option value="">All deadlines</option>
+          <option value="overdue">Overdue</option>
+          <option value="upcoming">Next 24 hours</option>
         </select>
       </div>
     </div>
