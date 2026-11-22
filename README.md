@@ -2,11 +2,28 @@
 
 A serverless task management application with secure authentication, deadline tracking, and automated email reminders. Built with React, Python, and AWS.
 
-[Live Demo](https://d2bbysp6jac78g.cloudfront.net/) · [Architecture](#architecture) · [Getting Started](#getting-started)
+[Live Demo](https://d2bbysp6jac78g.cloudfront.net/) · [Architecture](#architecture)
 
 ![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
 ![AWS Serverless](https://img.shields.io/badge/AWS-Serverless-FF9900)
+
+<table>
+<tr>
+<td align="center"><img src="assets/service-icons/cf.svg" width="40" height="40" alt="CloudFront"><br><sub>CloudFront</sub></td>
+<td align="center"><img src="assets/service-icons/s3.svg" width="40" height="40" alt="S3"><br><sub>S3</sub></td>
+<td align="center"><img src="assets/service-icons/auth.svg" width="40" height="40" alt="Cognito"><br><sub>Cognito</sub></td>
+<td align="center"><img src="assets/service-icons/api.svg" width="40" height="40" alt="API Gateway"><br><sub>API Gateway</sub></td>
+<td align="center"><img src="assets/service-icons/task.svg" width="40" height="40" alt="Lambda"><br><sub>Lambda</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="assets/service-icons/ep.svg" width="40" height="40" alt="VPC Endpoint"><br><sub>VPC Endpoint</sub></td>
+<td align="center"><img src="assets/service-icons/db.svg" width="40" height="40" alt="DynamoDB"><br><sub>DynamoDB</sub></td>
+<td align="center"><img src="assets/service-icons/streamsrc.svg" width="40" height="40" alt="DynamoDB Streams"><br><sub>DynamoDB Streams</sub></td>
+<td align="center"><img src="assets/service-icons/sched.svg" width="40" height="40" alt="EventBridge Scheduler"><br><sub>EventBridge Scheduler</sub></td>
+<td align="center"><img src="assets/service-icons/sns.svg" width="40" height="40" alt="SNS"><br><sub>SNS</sub></td>
+</tr>
+</table>
 
 ## Application Preview
 
@@ -47,35 +64,3 @@ Capture the actual application without personal email addresses or tokens.
 | Reminder consistency | Deterministic schedule names prevent multiple schedules per task; current-state and revision checks reject stale reminders. |
 | Duplicate reduction | Conditional DynamoDB leases track processing; workers mark notifications DONE only after SNS publish succeeds. |
 | Cost awareness | Serverless services and DynamoDB connectivity without a NAT Gateway keep the demo infrastructure small. |
-
-## Getting Started
-
-### Run the frontend locally
-
-Prerequisite: Node.js 24 and npm.
-
-```bash
-git clone https://github.com/TUNAS106/aws-serverless-task-manager.git
-cd aws-serverless-task-manager/frontend
-npm ci
-npm run dev
-```
-
-Without a local environment override, the frontend uses browser-only demo data. This mode lets you explore the interface without AWS credentials and does not send email.
-
-To connect to your AWS deployment, copy `frontend/.env.example` to `frontend/.env.local`, enter the public API and Cognito settings, and set `VITE_USE_MOCK=false`. Keep `.env.local` out of Git.
-
-### Backend and deployment
-
-The backend contains four Python 3.12 Lambda functions: **Task API**, **UserSetup**, **Stream Processor**, and **Reminder**. Deployment uses the AWS Console. Open `backend/build_packages.py` in VS Code and select **Run Python File** to generate the Lambda ZIP packages under `build/`.
-
-- [Frontend configuration and Cognito integration](frontend/README.md)
-- [Backend setup, IAM, deployment, and tests](backend/README.md)
-
-## Current Limitations & Roadmap
-
-- Notifications are asynchronous. The ledger reduces duplicates but cannot guarantee exactly-once delivery across SNS and DynamoDB.
-- Expired sessions require signing in again; automatic token refresh is not implemented.
-- CloudWatch dashboards and alarms, infrastructure as code, CI/CD, and a dead-letter queue are planned improvements.
-
-Deployment notes, cost estimates, and local verification reports remain under the ignored `docs/` directory. Credentials, local environment files, dependencies, and build packages are excluded from Git.
